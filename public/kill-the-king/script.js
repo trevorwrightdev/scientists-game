@@ -3,8 +3,21 @@ class Enemy {
     this.health = health;
     this.initHealth = health;
     this.name = name;
+    this.combatMode = Math.floor(Math.random() * 2);
   }
 }
+
+const characters = [
+  65,
+  83,
+  68,
+  70,
+  71,
+  72,
+  74,
+  75,
+  76
+]
 
 const development = true;
 
@@ -222,8 +235,7 @@ new Vue({
   data() {
     return {
       // * My additions
-      combatMode: 0,
-      characterToPress: 'a',
+      characterToPressKeycode: characters[Math.floor(Math.random() * characters.length)], 
 
       keyCode: 32,
       minutes: 4,
@@ -587,8 +599,6 @@ new Vue({
                   _this.enemy = new Enemy(7 * (_this.enemiesDefeated + 1 * _this.stage), _this.enemyNames[ Math.floor(Math.random() * _this.enemyNames.length)]);
                   
                   // ? Enemy is created here
-                  this.combatMode = Math.floor(Math.random() * 2);
-                  console.log(this.combatMode)
                 }
               }, 800)
             }
@@ -667,23 +677,12 @@ new Vue({
       this.enemiesDefeated = 0;
       this.enemy = new Enemy(5 * (_this.enemiesDefeated + 1 * _this.stage), _this.enemyNames[ Math.floor(Math.random() * _this.enemyNames.length)]);
 
-      // ? Enemy is created here
-      this.combatMode = Math.floor(Math.random() * 2);
-      console.log(this.combatMode)
-
       lowpassNode.frequency.value = 15000;
     },
 
-    
     startGame() {
       this.gameStarted = true;
       lowpassNode.frequency.value = 15000;
-
-      // * We must determine the combat mode in three places. This is one of the places, and the other is in the last setTimeout 
-      // * function in the punch function
-      // ? Enemy is created here
-      this.combatMode = Math.floor(Math.random() * 2);
-      console.log(this.combatMode)
 
       this.canAttack = true;
 
@@ -723,7 +722,6 @@ new Vue({
     }
   },
 
-
   mounted () {
     _this = this;
 
@@ -757,16 +755,22 @@ new Vue({
 
     // * SPACE BAR SPAMMING 
     document.body.onkeyup = function(e) {
+      console.log(_this.enemy.combatMode)
       // ! Remember to add: making space only activate punch when combat mode is 0.
-      if (this.combatMode === 0) {
+      if (_this.enemy.combatMode === 0) {
         if(e.keyCode == _this.keyCode) {
           if(!_this.shoppingPhase)
             _this.punch();
         }
-      } else if (this.combatMode === 1) {
-        
+      } else if (_this.enemy.combatMode === 1) {
+        if (e.keyCode == _this.characterToPressKeycode) {
+          if (!_this.shoppingPhase) {
+            _this.punch()
+            _this.characterToPressKeycode = characters[Math.floor(Math.random() * characters.length)]
+            console.log(_this.characterToPressKeycode)
+          }
+        }
       }
-
     }
   }
 });
