@@ -225,7 +225,8 @@ new Vue({
   data() {
     return {
       // * My additions
-      
+      combatMode: 0,
+
       keyCode: 32,
       minutes: 4,
       seconds: 0,
@@ -593,6 +594,10 @@ new Vue({
           }
 
           setTimeout(function() {
+            
+            // * This is that other place
+            _this.combatMode = Math.floor(Math.random() * 2);
+
             _this.canAttack = true;
             _this.enemyKilled = false;
           }, 800)
@@ -670,6 +675,11 @@ new Vue({
     startGame() {
       this.gameStarted = true;
       lowpassNode.frequency.value = 15000;
+
+      // * We must determine the combat mode in two places. This is one of the places, and the other is in the last setTimeout 
+      // * function in the punch function
+      // this.combatMode = Math.floor(Math.random() * 2);
+      _this.combatMode = 0;
       this.canAttack = true;
 
       timer = setInterval(function() {
@@ -742,9 +752,13 @@ new Vue({
 
     // * Space bar spamming happens here. 
     document.body.onkeyup = function(e) {
-      if(e.keyCode == _this.keyCode) {
-        if(!_this.shoppingPhase)
-          _this.punch();
+      console.log(_this.combatMode)
+      // ! Addition: making space only activate punch when combat mode is 0.
+      if (_this.combatMode == 0) {
+        if(e.keyCode == _this.keyCode) {
+          if(!_this.shoppingPhase)
+            _this.punch();
+        }
       }
     }
   }
