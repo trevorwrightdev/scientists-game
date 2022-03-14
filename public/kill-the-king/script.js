@@ -263,7 +263,7 @@ new Vue({
     return {
       // * My additions
       characterToPressKeycodeIndex: Math.floor(Math.random() * characters.length), 
-      tooltipText: 'text',
+      tooltipText: '',
 
       keyCode: 32,
       minutes: 4,
@@ -588,7 +588,7 @@ new Vue({
             _this.gamewin = true;
 
           } else {
-
+            
             if(_this.enemiesDefeated > _this.enemiesPerStage - 1) {
 
               _this.stageComplete = true;
@@ -649,10 +649,17 @@ new Vue({
           setTimeout(function() {
             _this.canAttack = true;
             _this.enemyKilled = false;
+
+            // * This switches the letter when an enemy spawns
+            if (_this.enemy.combatMode === 1) {
+              _this.characterToPressKeycodeIndex = Math.floor(Math.random() * characters.length);
+              _this.tooltipText = characters[_this.characterToPressKeycodeIndex].letter;
+            }
           }, 800)
         }
       }
 
+      // * This is what switches the letter at the end of every hit
       if (_this.enemy.combatMode === 1) {
         _this.characterToPressKeycodeIndex = Math.floor(Math.random() * characters.length);
         _this.tooltipText = characters[_this.characterToPressKeycodeIndex].letter;

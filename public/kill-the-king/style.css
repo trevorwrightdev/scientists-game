@@ -16,6 +16,16 @@ body {
   font-family: "AddLGBitmap09";
 }
 
+.clickCircle {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  background: red;
+  text-align: center;
+  display: grid;
+  place-items: center;
+}
+
 .game_lose,
 .game_win {
   position: absolute;
@@ -235,18 +245,17 @@ body {
   opacity: 0;
   transition: all 0.3s;
 }
+
 .game_inner__tooltip.active {
   opacity: 1;
 }
 .game_inner__tooltip .smash {
   width: 100%;
   text-align: center;
-  margin-top: 23px;
   font-size: 9px;
 }
 .game_inner__tooltip .space {
   width: 390px;
-  margin-top: 50px;
   height: 50px;
   background: white;
   position: relative;
