@@ -750,9 +750,8 @@ new Vue({
       }
     }
 
-    // * Space bar spamming happens here. 
+    // * SPACE BAR SPAMMING 
     document.body.onkeyup = function(e) {
-      console.log(_this.combatMode)
       // ! Addition: making space only activate punch when combat mode is 0.
       if (_this.combatMode == 0) {
         if(e.keyCode == _this.keyCode) {
@@ -761,5 +760,10 @@ new Vue({
         }
       }
     }
+
+    // * CLICK QUICKTIME EVENTS
+    
+
+    // * BUTTON SEQUENCES
   }
 });
