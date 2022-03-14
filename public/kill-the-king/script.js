@@ -8,15 +8,42 @@ class Enemy {
 }
 
 const characters = [
-  65,
-  83,
-  68,
-  70,
-  71,
-  72,
-  74,
-  75,
-  76
+  {
+    code: 65,
+    letter: 'A'
+  },
+  {
+    code: 83,
+    letter: 'S'
+  },
+  {
+    code: 68,
+    letter: 'D'
+  },
+  {
+    code: 70,
+    letter: 'F'
+  },
+  {
+    code: 71,
+    letter: 'G'
+  },
+  {
+    code: 72,
+    letter: 'H'
+  },
+  {
+    code: 74,
+    letter: 'J'
+  },
+  {
+    code: 75,
+    letter: 'K'
+  },
+  {
+    code: 76,
+    letter: 'L'
+  },
 ]
 
 const development = true;
@@ -235,7 +262,8 @@ new Vue({
   data() {
     return {
       // * My additions
-      characterToPressKeycode: characters[Math.floor(Math.random() * characters.length)], 
+      characterToPressKeycodeIndex: Math.floor(Math.random() * characters.length), 
+      tooltipText: 'text',
 
       keyCode: 32,
       minutes: 4,
@@ -497,7 +525,8 @@ new Vue({
   methods: {
     punch() {
       if(_this.canAttack && !_this.gamewin && !_this.gameover) {
-        _this.tooltip = false;
+
+        // _this.tooltip = false;
         _this.tooltipTimer = 0;
 
         _this.canAttack = !_this.canAttack;
@@ -521,8 +550,15 @@ new Vue({
 
         }, 500 - (50 * _this.speed))
 
-        if(_this.enemy.health > _this.damage) {
-          _this.enemy.health -= _this.damage;
+        let damageVal = _this.enemy.combatMode === 1 ? _this.damage * 3 : _this.damage
+
+        if(_this.enemy.health > damageVal) {
+          if (_this.enemy.combatMode === 0) {
+            _this.enemy.health -= _this.damage;
+          } else if (_this.enemy.combatMode === 1) {
+            _this.enemy.health -= _this.damage * 3;
+          }
+          
         } else {
 
           _this.canAttack = false;
@@ -598,7 +634,12 @@ new Vue({
                 } else {
                   _this.enemy = new Enemy(7 * (_this.enemiesDefeated + 1 * _this.stage), _this.enemyNames[ Math.floor(Math.random() * _this.enemyNames.length)]);
                   
-                  // ? Enemy is created here
+                  // * Change tooltip text here
+                  if (_this.enemy.combatMode === 0) {
+                    _this.tooltipText = 'space bar'
+                  } else if (_this.enemy.combatMode === 1) {
+                    _this.tooltipText = characters[_this.characterToPressKeycodeIndex].letter;
+                  }
                 }
               }, 800)
             }
@@ -611,6 +652,12 @@ new Vue({
           }, 800)
         }
       }
+
+      if (_this.enemy.combatMode === 1) {
+        _this.characterToPressKeycodeIndex = Math.floor(Math.random() * characters.length);
+        _this.tooltipText = characters[_this.characterToPressKeycodeIndex].letter;
+      }
+
     },
 
     toggleBg() {
@@ -653,7 +700,6 @@ new Vue({
 
         let newCost = u.costIncreasePerLevel * u.level;
         u.cost = newCost; 
-
       }
 
       if(type == 'weapons') {
@@ -678,11 +724,25 @@ new Vue({
       this.enemy = new Enemy(5 * (_this.enemiesDefeated + 1 * _this.stage), _this.enemyNames[ Math.floor(Math.random() * _this.enemyNames.length)]);
 
       lowpassNode.frequency.value = 15000;
+
+      // * Change tooltip text here
+      if (_this.enemy.combatMode === 0) {
+        _this.tooltipText = 'space bar'
+      } else if (_this.enemy.combatMode === 1) {
+        _this.tooltipText = characters[_this.characterToPressKeycodeIndex].letter;
+      }
     },
 
     startGame() {
       this.gameStarted = true;
       lowpassNode.frequency.value = 15000;
+
+      // * Change tooltip text here
+      if (_this.enemy.combatMode === 0) {
+        _this.tooltipText = 'space bar'
+      } else if (_this.enemy.combatMode === 1) {
+        _this.tooltipText = characters[_this.characterToPressKeycodeIndex].letter;
+      }
 
       this.canAttack = true;
 
@@ -696,9 +756,10 @@ new Vue({
           _this.canAttack = false;
         }
 
-        if(_this.tooltipTimer > 100) {
-          _this.tooltip = true;
-        }
+        // if(_this.tooltipTimer > 100) {
+        //   _this.tooltip = true;
+        // }
+
         if(_this.ms > 0) {
           _this.ms--;
           if(_this.ms < 10) {
@@ -755,7 +816,6 @@ new Vue({
 
     // * SPACE BAR SPAMMING 
     document.body.onkeyup = function(e) {
-      console.log(_this.enemy.combatMode)
       // ! Remember to add: making space only activate punch when combat mode is 0.
       if (_this.enemy.combatMode === 0) {
         if(e.keyCode == _this.keyCode) {
@@ -763,11 +823,9 @@ new Vue({
             _this.punch();
         }
       } else if (_this.enemy.combatMode === 1) {
-        if (e.keyCode == _this.characterToPressKeycode) {
+        if (e.keyCode == characters[_this.characterToPressKeycodeIndex].code) {
           if (!_this.shoppingPhase) {
             _this.punch()
-            _this.characterToPressKeycode = characters[Math.floor(Math.random() * characters.length)]
-            console.log(_this.characterToPressKeycode)
           }
         }
       }
