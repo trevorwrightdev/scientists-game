@@ -1,6 +1,3 @@
-// TODO: 
-
-
 class Enemy {
   constructor(health, name) {
     this.health = health;
@@ -226,6 +223,7 @@ new Vue({
     return {
       // * My additions
       combatMode: 0,
+      characterToPress: 'a',
 
       keyCode: 32,
       minutes: 4,
@@ -587,6 +585,10 @@ new Vue({
                   _this.boss = true;
                 } else {
                   _this.enemy = new Enemy(7 * (_this.enemiesDefeated + 1 * _this.stage), _this.enemyNames[ Math.floor(Math.random() * _this.enemyNames.length)]);
+                  
+                  // ? Enemy is created here
+                  this.combatMode = Math.floor(Math.random() * 2);
+                  console.log(this.combatMode)
                 }
               }, 800)
             }
@@ -594,10 +596,6 @@ new Vue({
           }
 
           setTimeout(function() {
-            
-            // * This is that other place
-            _this.combatMode = Math.floor(Math.random() * 2);
-
             _this.canAttack = true;
             _this.enemyKilled = false;
           }, 800)
@@ -668,6 +666,11 @@ new Vue({
       this.enemiesPerStage++;
       this.enemiesDefeated = 0;
       this.enemy = new Enemy(5 * (_this.enemiesDefeated + 1 * _this.stage), _this.enemyNames[ Math.floor(Math.random() * _this.enemyNames.length)]);
+
+      // ? Enemy is created here
+      this.combatMode = Math.floor(Math.random() * 2);
+      console.log(this.combatMode)
+
       lowpassNode.frequency.value = 15000;
     },
 
@@ -676,10 +679,12 @@ new Vue({
       this.gameStarted = true;
       lowpassNode.frequency.value = 15000;
 
-      // * We must determine the combat mode in two places. This is one of the places, and the other is in the last setTimeout 
+      // * We must determine the combat mode in three places. This is one of the places, and the other is in the last setTimeout 
       // * function in the punch function
-      // this.combatMode = Math.floor(Math.random() * 2);
-      _this.combatMode = 0;
+      // ? Enemy is created here
+      this.combatMode = Math.floor(Math.random() * 2);
+      console.log(this.combatMode)
+
       this.canAttack = true;
 
       timer = setInterval(function() {
@@ -752,18 +757,16 @@ new Vue({
 
     // * SPACE BAR SPAMMING 
     document.body.onkeyup = function(e) {
-      // ! Addition: making space only activate punch when combat mode is 0.
-      if (_this.combatMode == 0) {
+      // ! Remember to add: making space only activate punch when combat mode is 0.
+      if (this.combatMode === 0) {
         if(e.keyCode == _this.keyCode) {
           if(!_this.shoppingPhase)
             _this.punch();
         }
+      } else if (this.combatMode === 1) {
+        
       }
+
     }
-
-    // * CLICK QUICKTIME EVENTS
-    
-
-    // * BUTTON SEQUENCES
   }
 });
