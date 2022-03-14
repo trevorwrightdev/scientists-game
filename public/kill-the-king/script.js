@@ -588,7 +588,7 @@ new Vue({
             _this.gamewin = true;
 
           } else {
-            
+
             if(_this.enemiesDefeated > _this.enemiesPerStage - 1) {
 
               _this.stageComplete = true;

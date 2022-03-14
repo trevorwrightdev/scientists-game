@@ -10,7 +10,7 @@
 <body>
 <!-- partial:index.partial.html -->
 <div :class="{'pressed': pressed}" id='app'>
-  <div class="clickCircle">
+  <div @click='punch()' class="clickCircle">
     Circle
   </div>
   <audio controls='' crossorigin='anonymous' style='display: none;'>
