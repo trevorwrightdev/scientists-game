@@ -1,8 +1,5 @@
-// TODO: Upgrades should probably be:
-
-// 1. Make circles appear closer together
-// 2. Letter damage
-// 3. Space bar faster
+// TODO: Make spacebar and everything completely disappear and reappeat at the same points that 
+// attacking get enabled and disabled 
 
 class Enemy {
   constructor(health, name) {
@@ -616,7 +613,7 @@ let vm = new Vue({
       let leftMin = 0;
       let leftMax = 90;
 
-      // * Calculate new bounds
+      // ! Redo this probably, there are some inconstistencies
       topMin = (1.5 * _this.adrenals) + topMin;
       topMax = topMax - (1.5 * _this.adrenals);
 
@@ -643,9 +640,12 @@ let vm = new Vue({
 
         _this.tooltipTimer = 0;
 
-        // * Only slow down attacking when its spacebar mode
+        // * Only slow down attacking when its spacebar mode and remove UI if its keyboard mode
         if (_this.enemy.combatMode === 0) {
           _this.canAttack = !_this.canAttack;
+        } else if (_this.enemy.combatMode === 1) {
+          _this.canAttack = !_this.canAttack;
+          _this.tooltip = false;
         }
 
         _this.pressed = !_this.pressed;
@@ -665,6 +665,15 @@ let vm = new Vue({
           if(_this.enemyKilled == false) {
             if (_this.enemy.combatMode === 0) {
               _this.canAttack = !_this.canAttack;
+            } else if (_this.enemy.combatMode === 1) {
+              _this.canAttack = !_this.canAttack;
+              _this.tooltip = true;
+
+              // switch letter
+              if (_this.enemy.combatMode === 1 && _this.enemy.health > 0) {
+                _this.characterToPressKeycodeIndex = Math.floor(Math.random() * characters.length);
+                _this.tooltipText = `Press ${characters[_this.characterToPressKeycodeIndex].letter}`;
+              }
             }
           }
 
@@ -803,10 +812,10 @@ let vm = new Vue({
       }
 
       // * This is what switches the letter at the end of every hit
-      if (_this.enemy.combatMode === 1 && _this.enemy.health > 0) {
-        _this.characterToPressKeycodeIndex = Math.floor(Math.random() * characters.length);
-        _this.tooltipText = `Press ${characters[_this.characterToPressKeycodeIndex].letter}`;
-      }
+      // if (_this.enemy.combatMode === 1 && _this.enemy.health > 0) {
+      //   _this.characterToPressKeycodeIndex = Math.floor(Math.random() * characters.length);
+      //   _this.tooltipText = `Press ${characters[_this.characterToPressKeycodeIndex].letter}`;
+      // }
 
       if (_this.enemy.combatMode === 2) {
         // * Set circle location
@@ -891,6 +900,7 @@ let vm = new Vue({
         _this.showClickCircle = false;
       }
 
+      // * ON SHOPPING STAGE EXIT
       // * Change tooltip text and spacebar width here
       if (_this.enemy.combatMode === 0) {
         _this.tooltipText = 'Smash the spacebar!'
@@ -918,6 +928,7 @@ let vm = new Vue({
         _this.showClickCircle = false;
       }
 
+      // * ON START OF GAME
       // * Change tooltip text and spacebar width here
       if (_this.enemy.combatMode === 0) {
         _this.tooltipText = 'Smash the spacebar!'
