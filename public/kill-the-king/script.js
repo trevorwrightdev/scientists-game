@@ -1,9 +1,13 @@
+// TODO: make circle appear when combatMode is 3. Make circle disappear when combatMode is not 3. Make circle switch 
+// TODO: locations when you click it 
+
+
 class Enemy {
   constructor(health, name) {
     this.health = health;
     this.initHealth = health;
     this.name = name;
-    this.combatMode = Math.floor(Math.random() * 2);
+    this.combatMode = Math.floor(Math.random() * 3);
   }
 }
 
@@ -264,6 +268,7 @@ new Vue({
       // * My additions
       characterToPressKeycodeIndex: Math.floor(Math.random() * characters.length), 
       tooltipText: '',
+      showClickCircle: false,
 
       keyCode: 32,
       minutes: 4,
@@ -526,13 +531,11 @@ new Vue({
     punch() {
       if(_this.canAttack && !_this.gamewin && !_this.gameover) {
 
-        // _this.tooltip = false;
         _this.tooltipTimer = 0;
 
         _this.canAttack = !_this.canAttack;
         _this.pressed = !_this.pressed;
         _this.damageAnim = Math.floor(Math.random() * 10) + 1;
-
 
         let hitSound = Math.floor(Math.random() * 3) + 1;
         let gruntSound = Math.floor(Math.random() * 9) + 1;
@@ -550,14 +553,19 @@ new Vue({
 
         }, 500 - (50 * _this.speed))
 
-        let damageVal = _this.enemy.combatMode === 1 ? _this.damage * 3 : _this.damage
+        let damageVal;
+
+        if (_this.enemy.combatMode === 0) {
+          damageVal = _this.damage;
+        } else if (_this.enemy.combatMode === 1) {
+          damageVal = _this.damage * 3;
+        } else if (_this.enemy.combatMode === 2) {
+          damageVal = _this.damage * 2;
+        }
 
         if(_this.enemy.health > damageVal) {
-          if (_this.enemy.combatMode === 0) {
-            _this.enemy.health -= _this.damage;
-          } else if (_this.enemy.combatMode === 1) {
-            _this.enemy.health -= _this.damage * 3;
-          }
+          
+          _this.enemy.health -= damageVal;
           
         } else {
 
@@ -633,7 +641,16 @@ new Vue({
                   _this.boss = true;
                 } else {
                   _this.enemy = new Enemy(7 * (_this.enemiesDefeated + 1 * _this.stage), _this.enemyNames[ Math.floor(Math.random() * _this.enemyNames.length)]);
-                  
+
+                  // * Remove space bar if it is combatMode 2
+                  if (_this.enemy.combatMode === 2) {
+                    _this.tooltip = false;
+                    _this.showClickCircle = true;
+                  } else {
+                    _this.tooltip = true;
+                    _this.showClickCircle = false;
+                  }
+
                   // * Change tooltip text here
                   if (_this.enemy.combatMode === 0) {
                     _this.tooltipText = 'space bar'
@@ -732,6 +749,15 @@ new Vue({
 
       lowpassNode.frequency.value = 15000;
 
+      // * Remove space bar if it is combatMode 2
+      if (_this.enemy.combatMode === 2) {
+        _this.tooltip = false;
+        _this.showClickCircle = true;
+      } else {
+        _this.tooltip = true;
+        _this.showClickCircle = false;
+      }
+
       // * Change tooltip text here
       if (_this.enemy.combatMode === 0) {
         _this.tooltipText = 'space bar'
@@ -743,6 +769,15 @@ new Vue({
     startGame() {
       this.gameStarted = true;
       lowpassNode.frequency.value = 15000;
+
+      // * Remove space bar if it is combatMode 2
+      if (_this.enemy.combatMode === 2) {
+        _this.tooltip = false;
+        _this.showClickCircle = true;
+      } else {
+        _this.tooltip = true;
+        _this.showClickCircle = false;
+      }
 
       // * Change tooltip text here
       if (_this.enemy.combatMode === 0) {

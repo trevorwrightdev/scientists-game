@@ -10,9 +10,7 @@
 <body>
 <!-- partial:index.partial.html -->
 <div :class="{'pressed': pressed}" id='app'>
-  <div @click='punch()' class="clickCircle">
-    Circle
-  </div>
+  <div @click='punch()' :class="{'showElement': showClickCircle}" class="clickCircle">CLICK</div>
   <audio controls='' crossorigin='anonymous' style='display: none;'>
     <source src='https://assets.codepen.io/217233/ktkBgAudio.mp3' type='audio/mp3'>
   </audio>
