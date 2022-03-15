@@ -50,6 +50,16 @@ const characters = [
   },
 ]
 
+const setPosition = () => {
+  let topVal = Math.floor(Math.random() * 41);
+  let leftVal = Math.floor(Math.random() * 91);
+
+  return {
+    marginTop: `${topVal}%`,
+    marginLeft:  `${leftVal}%`,
+  }
+}
+
 const development = true;
 
 class AudioController {
@@ -269,6 +279,10 @@ new Vue({
       characterToPressKeycodeIndex: Math.floor(Math.random() * characters.length), 
       tooltipText: '',
       showClickCircle: false,
+      position: {
+        marginTop: '40%',
+        marginLeft: '90%'
+      },
 
       keyCode: 32,
       minutes: 4,
@@ -526,7 +540,6 @@ new Vue({
       }
     }
   },
-
   methods: {
     punch() {
       if(_this.canAttack && !_this.gamewin && !_this.gameover) {
@@ -568,6 +581,11 @@ new Vue({
           _this.enemy.health -= damageVal;
           
         } else {
+
+          // * This removes click circle once the enemy dies so you can't press it anymore
+          if (_this.enemy.combatMode === 2) {
+            _this.showClickCircle = false;
+          }
 
           _this.canAttack = false;
 
@@ -642,10 +660,13 @@ new Vue({
                 } else {
                   _this.enemy = new Enemy(7 * (_this.enemiesDefeated + 1 * _this.stage), _this.enemyNames[ Math.floor(Math.random() * _this.enemyNames.length)]);
 
-                  // * Remove space bar if it is combatMode 2
+                  // * Remove space bar if it is combatMode 2 and show circle
                   if (_this.enemy.combatMode === 2) {
                     _this.tooltip = false;
                     _this.showClickCircle = true;
+
+                  // * Set circle location
+                  _this.position = setPosition();
                   } else {
                     _this.tooltip = true;
                     _this.showClickCircle = false;
@@ -680,6 +701,11 @@ new Vue({
       if (_this.enemy.combatMode === 1) {
         _this.characterToPressKeycodeIndex = Math.floor(Math.random() * characters.length);
         _this.tooltipText = characters[_this.characterToPressKeycodeIndex].letter;
+      }
+
+      if (_this.enemy.combatMode === 2) {
+        // * Set circle location
+        _this.position = setPosition();
       }
 
     },
@@ -749,10 +775,13 @@ new Vue({
 
       lowpassNode.frequency.value = 15000;
 
-      // * Remove space bar if it is combatMode 2
+      // * Remove space bar if it is combatMode 2 and show circle
       if (_this.enemy.combatMode === 2) {
         _this.tooltip = false;
         _this.showClickCircle = true;
+
+        // * Set circle location
+        _this.position = setPosition();
       } else {
         _this.tooltip = true;
         _this.showClickCircle = false;
@@ -770,10 +799,14 @@ new Vue({
       this.gameStarted = true;
       lowpassNode.frequency.value = 15000;
 
-      // * Remove space bar if it is combatMode 2
+      // * Remove space bar if it is combatMode 2 and show circle
       if (_this.enemy.combatMode === 2) {
         _this.tooltip = false;
         _this.showClickCircle = true;
+
+        // * Set circle location
+        _this.position = setPosition();
+
       } else {
         _this.tooltip = true;
         _this.showClickCircle = false;
