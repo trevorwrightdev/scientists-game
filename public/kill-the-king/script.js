@@ -343,8 +343,8 @@ let vm = new Vue({
         width: '390px',
       },
       position: {},
-      plasmite: 1,
-      claws: 1,
+      plasmite: 2, // These are two because weapons give you a free point, but I don't want to use weapons
+      claws: 2,
       adrenals: 1,
 
       keyCode: 32,
