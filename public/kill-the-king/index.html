@@ -56,7 +56,7 @@
     <div class='game_inner'>
       <div :class="{'active': tooltip}" class='game_inner__tooltip'>
         <div class='smash'>{{ tooltipText }}</div>
-        <div class='space'></div>
+        <div class='space' v-bind:style="spacebarWidth"></div>
       </div>
       <div class='game_inner__footer'>
         <!-- * THIS IS THE 'MADE BY' IN BOTTOM LEFT-->
@@ -116,16 +116,16 @@
               <div class='stats'>
                 <div class='ui_strength'>
                   <img src='https://assets.codepen.io/217233/ktkStrengthIcon.png'>
-                  {{ strength }} STR
+                  {{ strength }} PLASMITE
                   <br>
                 </div>
                 <div class='ui_intelligence'>
                   <img src='https://assets.codepen.io/217233/ktkKnowledgeIcon.png'>
-                  {{ intelligence }} INT
+                  {{ intelligence }} CLAW
                 </div>
                 <div class='ui_speed'>
                   <img src='https://assets.codepen.io/217233/ktkSpeedIcon.png'>
-                  {{ speed }} SPD
+                  {{ adrenals }} ADRENALS
                 </div>
               </div>
               <div :class="{'pressed': pressed}" class='player_sprite'></div>

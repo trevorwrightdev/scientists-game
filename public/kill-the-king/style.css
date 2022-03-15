@@ -253,6 +253,10 @@ body {
   margin: auto;
   opacity: 0;
   transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .game_inner__tooltip.active {
@@ -264,7 +268,6 @@ body {
   font-size: 9px;
 }
 .game_inner__tooltip .space {
-  width: 390px;
   height: 50px;
   background: white;
   position: relative;

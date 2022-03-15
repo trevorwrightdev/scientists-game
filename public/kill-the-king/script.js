@@ -339,7 +339,13 @@ let vm = new Vue({
       characterToPressKeycodeIndex: Math.floor(Math.random() * characters.length), 
       tooltipText: '',
       showClickCircle: false,
+      spacebarWidth: {
+        width: '390px',
+      },
       position: {},
+      plasmite: 1,
+      claws: 1,
+      adrenals: 1,
 
       keyCode: 32,
       minutes: 4,
@@ -557,7 +563,7 @@ let vm = new Vue({
         {
           'name'      : 'hitmarker',
           'source'    : './hitmarker_2.mp3',
-          'stackSize' : 10
+          'stackSize' : 1
         },
       ],
 
@@ -571,19 +577,19 @@ let vm = new Vue({
           'level' : 1,
           'increment' : 1,
           'costIncreasePerLevel' : 20,
-          'metric' : 'Strength',
+          'metric' : 'Plasmite',
           'stat' : 'strength',
           'maxLevel' : 100
         },
         1: {
           'type': 'stat',
           'names': 'Sharpen Claws',
-          'descriptions' : 'Increase the damage of your space bar attacks.',
+          'descriptions' : 'Increase the damage of your spacebar attacks.',
           'cost' : 25,
           'level' : 1,
           'increment' : 1,
           'costIncreasePerLevel' : 20,
-          'metric' : 'Intelligence',
+          'metric' : 'Claws',
           'stat' : 'intelligence',
           'maxLevel' : 100
         },
@@ -595,8 +601,8 @@ let vm = new Vue({
           'level' : 1,
           'increment' : 1,
           'costIncreasePerLevel' : 20,
-          'metric' : 'Speed',
-          'stat' : 'speed',
+          'metric' : 'Adrenals',
+          'stat' : 'adrenals',
           'maxLevel' : 7
         }
       }
@@ -606,7 +612,7 @@ let vm = new Vue({
     setPosition() {
       let topVal = Math.floor(Math.random() * 26) + 15;
       let leftVal = Math.floor(Math.random() * 91);
-    
+
       _this.position = {
         marginTop: `${topVal}%`,
         marginLeft:  `${leftVal}%`,
@@ -622,6 +628,7 @@ let vm = new Vue({
 
         _this.tooltipTimer = 0;
 
+        // * Only slow down attacking when its spacebar mode
         if (_this.enemy.combatMode === 0) {
           _this.canAttack = !_this.canAttack;
         }
@@ -638,6 +645,7 @@ let vm = new Vue({
           _this.pressed = !_this.pressed;
         }, 150)
 
+        // * Only allow attacking if its spacebar mode
         setTimeout(function() {
           if(_this.enemyKilled == false) {
             if (_this.enemy.combatMode === 0) {
@@ -645,7 +653,7 @@ let vm = new Vue({
             }
           }
 
-        }, 500 - (50 * _this.speed))
+        }, 500 - (50 * _this.adrenals))
 
         let damageVal;
 
@@ -754,11 +762,13 @@ let vm = new Vue({
                   _this.showClickCircle = false;
                 }
 
-                // * Change tooltip text here
+                // * Change tooltip text and spacebar length here
                 if (_this.enemy.combatMode === 0) {
-                  _this.tooltipText = 'space bar'
+                  _this.tooltipText = 'Smash the spacebar!'
+                  _this.spacebarWidth.width = '390px';
                 } else if (_this.enemy.combatMode === 1) {
-                  _this.tooltipText = characters[_this.characterToPressKeycodeIndex].letter;
+                  _this.tooltipText = `Press ${characters[_this.characterToPressKeycodeIndex].letter}`;
+                  _this.spacebarWidth.width = '50px';
                 }
 
               }, 800)
@@ -772,7 +782,7 @@ let vm = new Vue({
             // * This switches the letter when an enemy spawns
             if (_this.enemy.combatMode === 1) {
               _this.characterToPressKeycodeIndex = Math.floor(Math.random() * characters.length);
-              _this.tooltipText = characters[_this.characterToPressKeycodeIndex].letter;
+              _this.tooltipText = `Press ${characters[_this.characterToPressKeycodeIndex].letter}`;
             }
           }, 800)
         }
@@ -781,7 +791,7 @@ let vm = new Vue({
       // * This is what switches the letter at the end of every hit
       if (_this.enemy.combatMode === 1 && _this.enemy.health > 0) {
         _this.characterToPressKeycodeIndex = Math.floor(Math.random() * characters.length);
-        _this.tooltipText = characters[_this.characterToPressKeycodeIndex].letter;
+        _this.tooltipText = `Press ${characters[_this.characterToPressKeycodeIndex].letter}`;
       }
 
       if (_this.enemy.combatMode === 2) {
@@ -817,8 +827,8 @@ let vm = new Vue({
           this.damage = (this.strength * 1) + this.weaponDamage;
         }
 
-        if(stat == 'speed') {
-          this.speed += u.increment;
+        if(stat == 'adrenals') {
+          this.adrenals += u.increment;
         }
 
         if(stat == 'intelligence') {
@@ -868,11 +878,13 @@ let vm = new Vue({
         _this.showClickCircle = false;
       }
 
-      // * Change tooltip text here
+      // * Change tooltip text and spacebar width here
       if (_this.enemy.combatMode === 0) {
-        _this.tooltipText = 'space bar'
+        _this.tooltipText = 'Smash the spacebar!'
+        _this.spacebarWidth.width = '390px';
       } else if (_this.enemy.combatMode === 1) {
-        _this.tooltipText = characters[_this.characterToPressKeycodeIndex].letter;
+        _this.tooltipText = `Press ${characters[_this.characterToPressKeycodeIndex].letter}`;
+        _this.spacebarWidth.width = '50px';
       }
     },
 
@@ -893,11 +905,13 @@ let vm = new Vue({
         _this.showClickCircle = false;
       }
 
-      // * Change tooltip text here
+      // * Change tooltip text and spacebar width here
       if (_this.enemy.combatMode === 0) {
-        _this.tooltipText = 'space bar'
+        _this.tooltipText = 'Smash the spacebar!'
+        _this.spacebarWidth.width = '390px';
       } else if (_this.enemy.combatMode === 1) {
-        _this.tooltipText = characters[_this.characterToPressKeycodeIndex].letter;
+        _this.tooltipText = `Press ${characters[_this.characterToPressKeycodeIndex].letter}`;
+        _this.spacebarWidth.width = '50px';
       }
 
       this.canAttack = true;
@@ -970,7 +984,7 @@ let vm = new Vue({
       }
     }
 
-    // * SPACE BAR SPAMMING 
+    // * SPACE BAR AND KEYBOARD SPAMMING 
     document.body.onkeyup = function(e) {
       // ! Remember to add: making space only activate punch when combat mode is 0.
       if (_this.enemy.combatMode === 0) {
