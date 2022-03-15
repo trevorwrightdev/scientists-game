@@ -1,6 +1,8 @@
-// TODO: make circle appear when combatMode is 3. Make circle disappear when combatMode is not 3. Make circle switch 
-// TODO: locations when you click it 
+// TODO: Upgrades should probably be:
 
+// 1. Make circles appear closer together
+// 2. Letter damage
+// 3. Space bar faster
 
 class Enemy {
   constructor(health, name) {
@@ -48,17 +50,75 @@ const characters = [
     code: 76,
     letter: 'L'
   },
+  {
+    code: 81,
+    letter: 'Q'
+  },
+  {
+    code: 87,
+    letter: 'W'
+  },
+  {
+    code: 69,
+    letter: 'E'
+  },
+  {
+    code: 82,
+    letter: 'R'
+  },
+  {
+    code: 84,
+    letter: 'T'
+  },
+  {
+    code: 89,
+    letter: 'Y'
+  },
+  {
+    code: 85,
+    letter: 'U'
+  },
+  {
+    code: 73,
+    letter: 'I'
+  },
+  {
+    code: 79,
+    letter: 'O'
+  },
+  {
+    code: 80,
+    letter: 'P'
+  },
+  {
+    code: 90,
+    letter: 'Z'
+  },
+  {
+    code: 88,
+    letter: 'X'
+  },
+  {
+    code: 67,
+    letter: 'C'
+  },
+  {
+    code: 86,
+    letter: 'V'
+  },
+  {
+    code: 66,
+    letter: 'B'
+  },
+  {
+    code: 78,
+    letter: 'N'
+  },
+  {
+    code: 77,
+    letter: 'M'
+  },
 ]
-
-const setPosition = () => {
-  let topVal = Math.floor(Math.random() * 26) + 15;
-  let leftVal = Math.floor(Math.random() * 91);
-
-  return {
-    marginTop: `${topVal}%`,
-    marginLeft:  `${leftVal}%`,
-  }
-}
 
 const development = true;
 
@@ -270,7 +330,7 @@ class AudioController {
   }
 }
 
-new Vue({
+let vm = new Vue({
   el: '#app',
 
   data() {
@@ -505,8 +565,8 @@ new Vue({
       upgrades: {
         0: {
           'type': 'stat',
-          'names': 'Strength up',
-          'descriptions' : 'Increase your base strength. Do more damage.',
+          'names': 'Inject Plasmite',
+          'descriptions' : 'Increase the damage of your keyboard and click attacks.',
           'cost' : 25,
           'level' : 1,
           'increment' : 1,
@@ -517,8 +577,8 @@ new Vue({
         },
         1: {
           'type': 'stat',
-          'names': 'Intelligence up',
-          'descriptions' : 'Increase your intelligence and gain more xp per kill.',
+          'names': 'Sharpen Claws',
+          'descriptions' : 'Increase the damage of your space bar attacks.',
           'cost' : 25,
           'level' : 1,
           'increment' : 1,
@@ -529,8 +589,8 @@ new Vue({
         },
         2: {
           'type': 'stat',
-          'names': 'Speed up',
-          'descriptions' : 'Increase your speed. Strike quicker!',
+          'names': 'Boost Adrenals',
+          'descriptions' : 'Increase the speed and precision of all attacks.',
           'cost' : 25,
           'level' : 1,
           'increment' : 1,
@@ -543,17 +603,29 @@ new Vue({
     }
   },
   methods: {
+    setPosition() {
+      let topVal = Math.floor(Math.random() * 26) + 15;
+      let leftVal = Math.floor(Math.random() * 91);
+    
+      _this.position = {
+        marginTop: `${topVal}%`,
+        marginLeft:  `${leftVal}%`,
+      }
+    },
     punch() {
       if(_this.canAttack && !_this.gamewin && !_this.gameover) {
 
-        // * Play sound and animation
+        // * Play sound
         if (_this.enemy.combatMode === 2) {
           _this.audioController.play('hitmarker');
         }
 
         _this.tooltipTimer = 0;
 
-        _this.canAttack = !_this.canAttack;
+        if (_this.enemy.combatMode === 0) {
+          _this.canAttack = !_this.canAttack;
+        }
+
         _this.pressed = !_this.pressed;
         _this.damageAnim = Math.floor(Math.random() * 10) + 1;
 
@@ -568,7 +640,9 @@ new Vue({
 
         setTimeout(function() {
           if(_this.enemyKilled == false) {
-            _this.canAttack = !_this.canAttack;
+            if (_this.enemy.combatMode === 0) {
+              _this.canAttack = !_this.canAttack;
+            }
           }
 
         }, 500 - (50 * _this.speed))
@@ -674,7 +748,7 @@ new Vue({
                   _this.showClickCircle = true;
 
                 // * Set circle location
-                _this.position = setPosition();
+                vm.setPosition();
                 } else {
                   _this.tooltip = true;
                   _this.showClickCircle = false;
@@ -705,14 +779,14 @@ new Vue({
       }
 
       // * This is what switches the letter at the end of every hit
-      if (_this.enemy.combatMode === 1) {
+      if (_this.enemy.combatMode === 1 && _this.enemy.health > 0) {
         _this.characterToPressKeycodeIndex = Math.floor(Math.random() * characters.length);
         _this.tooltipText = characters[_this.characterToPressKeycodeIndex].letter;
       }
 
       if (_this.enemy.combatMode === 2) {
         // * Set circle location
-        _this.position = setPosition();
+        vm.setPosition();
       }
 
     },
@@ -788,7 +862,7 @@ new Vue({
         _this.showClickCircle = true;
 
         // * Set circle location
-        _this.position = setPosition();
+        vm.setPosition();
       } else {
         _this.tooltip = true;
         _this.showClickCircle = false;
@@ -812,7 +886,7 @@ new Vue({
         _this.showClickCircle = true;
 
         // * Set circle location
-        _this.position = setPosition();
+        vm.setPosition();
 
       } else {
         _this.tooltip = true;
