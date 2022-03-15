@@ -613,12 +613,11 @@ let vm = new Vue({
       let leftMin = 0;
       let leftMax = 90;
 
-      // ! Redo this probably, there are some inconstistencies
-      topMin = (1.5 * _this.adrenals) + topMin;
-      topMax = topMax - (1.5 * _this.adrenals);
+      topMin = (2.083 * (_this.adrenals - 1)) + topMin;
+      topMax = topMax - (2.083 * (_this.adrenals - 1));
 
-      leftMin = 6.4 * _this.adrenals;
-      leftMax = leftMax - (6.4 * _this.adrenals);
+      leftMin = 7.5 * (_this.adrenals - 1);
+      leftMax = leftMax - (7.5 * (_this.adrenals - 1));
       
       // * 15% - 40%
       let topVal = Math.floor(Math.random() * ((topMax - topMin) + 1)) + topMin;
@@ -684,9 +683,11 @@ let vm = new Vue({
 
         if (_this.enemy.combatMode === 0) {
           damageVal = _this.claws;
-        } else {
+        } else if (_this.enemy.combatMode === 1) {
+          damageVal = _this.plasmite * 3;
+        } else if (_this.enemy.combatMode === 2) {
           damageVal = _this.plasmite * 2;
-        } 
+        }
 
         if(_this.enemy.health > damageVal) {
           
