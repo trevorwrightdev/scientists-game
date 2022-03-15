@@ -613,11 +613,11 @@ let vm = new Vue({
       let leftMin = 0;
       let leftMax = 90;
 
-      topMin = (2.083 * (_this.adrenals - 1)) + topMin;
-      topMax = topMax - (2.083 * (_this.adrenals - 1));
+      topMin = (1.786 * (_this.adrenals - 1)) + topMin;
+      topMax = topMax - (1.786 * (_this.adrenals - 1));
 
-      leftMin = 7.5 * (_this.adrenals - 1);
-      leftMax = leftMax - (7.5 * (_this.adrenals - 1));
+      leftMin = 6.43 * (_this.adrenals - 1);
+      leftMax = leftMax - (6.43 * (_this.adrenals - 1));
       
       // * 15% - 40%
       let topVal = Math.floor(Math.random() * ((topMax - topMin) + 1)) + topMin;
