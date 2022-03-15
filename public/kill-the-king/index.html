@@ -133,8 +133,14 @@
             </div>
             <div :class="{'run': stageComplete}" class='enemy'>
               <div :class="{'pressed': pressed, 'killed' : enemyKilled, 'boss' : boss}" :style='{filter: `hue-rotate(${80 * (stage - 1)}deg)`}' class='enemy_sprite'></div>
-              <div :class="{'pressed': pressed}" class='enemy_hit'>
-                {{ damage }}
+              <div :class="{'pressed': pressed}" class='enemy_hit' v-if="enemy.combatMode === 0">
+                {{ spaceDamage }}
+              </div>
+              <div :class="{'pressed': pressed}" class='enemy_hit' v-else-if="enemy.combatMode === 1">
+                {{ keyDamage }}
+              </div>
+              <div :class="{'pressed': pressed}" class='enemy_hit' v-else-if="enemy.combatMode === 2">
+                {{ clickDamage }}
               </div>
               <div :class="{'killed': enemyKilled}" class='enemy_xp'>
                 <img src='https://assets.codepen.io/217233/ktkXpIxon.png'>

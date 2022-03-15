@@ -343,6 +343,9 @@ let vm = new Vue({
       plasmite: 1, 
       claws: 1,
       adrenals: 1,
+      clickDamage: 2,
+      keyDamage: 3,
+      spaceDamage: 1,
 
       keyCode: 32,
       minutes: 4,
@@ -682,11 +685,11 @@ let vm = new Vue({
         let damageVal;
 
         if (_this.enemy.combatMode === 0) {
-          damageVal = _this.claws;
+          damageVal = _this.spaceDamage;
         } else if (_this.enemy.combatMode === 1) {
-          damageVal = _this.plasmite * 3;
+          damageVal = _this.keyDamage
         } else if (_this.enemy.combatMode === 2) {
-          damageVal = _this.plasmite * 2;
+          damageVal = _this.clickDamage;
         }
 
         if(_this.enemy.health > damageVal) {
@@ -846,12 +849,16 @@ let vm = new Vue({
 
         this.xp -= u.cost;
 
+        // * we configure damage here
         if(stat == 'plasmite') {
           this.plasmite += u.increment;
+          this.keyDamage = this.plasmite * 3;
+          this.clickDamage = this.plasmite * 2;
         }
 
         if(stat == 'claws') {
           this.claws += u.increment
+          this.spaceDamage = this.claws;
         }
 
         if(stat == 'adrenals') {
