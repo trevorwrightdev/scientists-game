@@ -610,8 +610,23 @@ let vm = new Vue({
   },
   methods: {
     setPosition() {
-      let topVal = Math.floor(Math.random() * 26) + 15;
-      let leftVal = Math.floor(Math.random() * 91);
+      let topMin = 15;
+      let topMax = 40;
+
+      let leftMin = 0;
+      let leftMax = 90;
+
+      // * Calculate new bounds
+      topMin = (1.5 * _this.adrenals) + topMin;
+      topMax = topMax - (1.5 * _this.adrenals);
+
+      leftMin = 6.4 * _this.adrenals;
+      leftMax = leftMax - (6.4 * _this.adrenals);
+      
+      // * 15% - 40%
+      let topVal = Math.floor(Math.random() * ((topMax - topMin) + 1)) + topMin;
+      // * 0% - 90%
+      let leftVal = Math.floor(Math.random() * ((leftMax - leftMin) + 1)) + leftMin;
 
       _this.position = {
         marginTop: `${topVal}%`,
@@ -655,6 +670,7 @@ let vm = new Vue({
 
         }, 500 - (50 * _this.adrenals))
 
+        // * Calculate damage based off new stats
         let damageVal;
 
         if (_this.enemy.combatMode === 0) {
