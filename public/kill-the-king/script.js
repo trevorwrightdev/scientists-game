@@ -1,6 +1,3 @@
-// TODO: Make spacebar and everything completely disappear and reappeat at the same points that 
-// attacking get enabled and disabled 
-
 class Enemy {
   constructor(health, name) {
     this.health = health;
@@ -671,14 +668,13 @@ let vm = new Vue({
               _this.canAttack = !_this.canAttack;
               _this.tooltip = true;
 
-              // switch letter
+              // * switch letter because now they can attack.
               if (_this.enemy.combatMode === 1 && _this.enemy.health > 0) {
                 _this.characterToPressKeycodeIndex = Math.floor(Math.random() * characters.length);
                 _this.tooltipText = `Press ${characters[_this.characterToPressKeycodeIndex].letter}`;
               }
             }
           }
-
         }, 500 - (50 * _this.adrenals))
 
         // * Calculate damage based off new stats
@@ -815,17 +811,10 @@ let vm = new Vue({
         }
       }
 
-      // * This is what switches the letter at the end of every hit
-      // if (_this.enemy.combatMode === 1 && _this.enemy.health > 0) {
-      //   _this.characterToPressKeycodeIndex = Math.floor(Math.random() * characters.length);
-      //   _this.tooltipText = `Press ${characters[_this.characterToPressKeycodeIndex].letter}`;
-      // }
-
       if (_this.enemy.combatMode === 2) {
         // * Set circle location
         vm.setPosition();
       }
-
     },
 
     toggleBg() {
@@ -1018,7 +1007,6 @@ let vm = new Vue({
 
     // * SPACE BAR AND KEYBOARD SPAMMING 
     document.body.onkeyup = function(e) {
-      // ! Remember to add: making space only activate punch when combat mode is 0.
       if (_this.enemy.combatMode === 0) {
         if(e.keyCode == _this.keyCode) {
           if(!_this.shoppingPhase)

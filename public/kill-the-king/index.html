@@ -5,7 +5,6 @@
   <title>CodePen - Kill The King - Vue / HTML game</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 <link rel="stylesheet" href="./style.css">
-
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -45,7 +44,9 @@
         <br>
         <p @click='introClicked = !introClicked, audioController.play("crushyou")' class='begin'>BEGIN GAME</p>
       </div>
+      <!-- * This div is shown after they've pressed begin game -->
       <div :class="{'gamestarted': !introClicked}" class='game_intro__inner end'>
+        <!-- * INVENTORY -->
         <div class='dialogue'>
           <span>King Trost</span>
           <p>HAHAHA, YOU HONESTLY THINK YOU CAN DEFEAT ME!? MY MEN WILL CRUSH YOU, BOY.</p>
@@ -133,6 +134,7 @@
             </div>
             <div :class="{'run': stageComplete}" class='enemy'>
               <div :class="{'pressed': pressed, 'killed' : enemyKilled, 'boss' : boss}" :style='{filter: `hue-rotate(${80 * (stage - 1)}deg)`}' class='enemy_sprite'></div>
+              <!-- * Rendering each value based on combatMode -->
               <div :class="{'pressed': pressed}" class='enemy_hit' v-if="enemy.combatMode === 0">
                 {{ spaceDamage }}
               </div>

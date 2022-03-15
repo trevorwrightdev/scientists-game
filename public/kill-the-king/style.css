@@ -16,6 +16,12 @@ body {
   font-family: "AddLGBitmap09";
 }
 
+.inventory {
+  background: gray;
+  width: 500px;
+  height: 300px;
+}
+
 .clickCircle {
   display: none;
   position: absolute;
