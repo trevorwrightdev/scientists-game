@@ -343,8 +343,8 @@ let vm = new Vue({
         width: '390px',
       },
       position: {},
-      plasmite: 2, // These are two because weapons give you a free point, but I don't want to use weapons
-      claws: 2,
+      plasmite: 1, 
+      claws: 1,
       adrenals: 1,
 
       keyCode: 32,
@@ -578,7 +578,7 @@ let vm = new Vue({
           'increment' : 1,
           'costIncreasePerLevel' : 20,
           'metric' : 'Plasmite',
-          'stat' : 'strength',
+          'stat' : 'plasmite',
           'maxLevel' : 100
         },
         1: {
@@ -590,7 +590,7 @@ let vm = new Vue({
           'increment' : 1,
           'costIncreasePerLevel' : 20,
           'metric' : 'Claws',
-          'stat' : 'intelligence',
+          'stat' : 'claws',
           'maxLevel' : 100
         },
         2: {
@@ -658,12 +658,10 @@ let vm = new Vue({
         let damageVal;
 
         if (_this.enemy.combatMode === 0) {
-          damageVal = _this.damage;
-        } else if (_this.enemy.combatMode === 1) {
-          damageVal = _this.damage * 3;
-        } else if (_this.enemy.combatMode === 2) {
-          damageVal = _this.damage * 2;
-        }
+          damageVal = _this.claws;
+        } else {
+          damageVal = _this.plasmite * 2;
+        } 
 
         if(_this.enemy.health > damageVal) {
           
@@ -822,17 +820,16 @@ let vm = new Vue({
 
         this.xp -= u.cost;
 
-        if(stat == 'strength') {
-          this.strength += u.increment;
-          this.damage = (this.strength * 1) + this.weaponDamage;
+        if(stat == 'plasmite') {
+          this.plasmite += u.increment;
+        }
+
+        if(stat == 'claws') {
+          this.claws += u.increment
         }
 
         if(stat == 'adrenals') {
           this.adrenals += u.increment;
-        }
-
-        if(stat == 'intelligence') {
-          this.intelligence += u.increment
         }
 
         if(stat == 'luck') {
